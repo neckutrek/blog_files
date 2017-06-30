@@ -1,1 +1,1 @@
-# blog_files
+Storage of files I refer to in my programming blog
