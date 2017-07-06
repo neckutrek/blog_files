@@ -14,13 +14,14 @@ ROOT_PATH=$1
 INCLUDE_PATH=$ROOT_PATH"include/"
 
 grep -e '^#include "[^/.]+\.h{1,2}"$' -rnwP $ROOT_PATH --include=\*.{c,cc,cpp,h,hh} \
-    | while read -r line
+    | while read -r LINE
 do
-    FILEPATH=$(echo "$line" | cut -d":" -f1)
-    INCFILE=$(echo "$line" | cut -d":" -f3 | cut -d"\"" -f2)
+    FILEPATH=$(echo "$LINE" | cut -d":" -f1)
+    ROWNR=$(echo "$LINE" | cut -d":" -f2)
+    INCFILE=$(echo "$LINE" | cut -d":" -f3 | cut -d"\"" -f2)
     INCFILEPATH=$(find $INCLUDE_PATH -name "$INCFILE")
     if [ ! -z $INCFILEPATH ] ; then
 	RELPATH=$(echo $INCFILEPATH | sed -e "s~${INCLUDE_PATH}~~")
-	sed -i -e "s~$INCFILE~$RELPATH~" "$FILEPATH"
+	sed -i -e "${ROWNR}s~$INCFILE~$RELPATH~" "$FILEPATH"
     fi
 done
